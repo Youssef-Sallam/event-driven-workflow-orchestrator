@@ -1,0 +1,26 @@
+id: post_flash_sale
+name: Post-Flash Sale Operations
+nodes:
+  - id: start
+    type: event
+    label: "Ingest Order Event"
+  - id: reconcile
+    type: reconcile_orders
+    label: "Reconcile Orders"
+  - id: restock
+    type: restock_check
+    label: "Check and Restock Inventory"
+  - id: alert
+    type: alert
+    label: "Send Low Inventory Alert"
+edges:
+  - from: start
+    to: reconcile
+  - from: reconcile
+    to: restock
+  - from: restock
+    to: alert
+    condition: low_inventory
+  - from: restock
+    to: end
+    condition: ok
